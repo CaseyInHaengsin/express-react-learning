@@ -5,6 +5,15 @@ const keys = require('../configs/keys');
 
 const User = mongoose.model('users');
 
+passport.serializeUser((user, done) => {
+	done(null, user.id);
+})
+
+passport.deserializeUser(async (id, done) => {
+	let userFound = await User.findById(id);
+	done(null, userFound);
+});
+
 passport.use(new GoogleStrategy({
 	clientID: keys.googleClientID,
 	clientSecret: keys.googleSclientSecret,
@@ -17,10 +26,6 @@ passport.use(new GoogleStrategy({
 			let newUser = await new User({ googleId: profile.id, name: profile.displayName}).save();
 			done(null, newUser);
 		}
-		
-		console.log(refreshToken);
-		console.log(profile);
-		console.log(accessToken);
 	})
 );
 
