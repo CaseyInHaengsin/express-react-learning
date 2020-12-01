@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 
 class Header extends Component {
+
+    renderContent(){
+        switch (this.props.auth){
+            case null:
+                return "Still deciding"
+
+            case false:
+                return "i'm logged out"
+
+            default:
+                return "i'm logged in"
+
+
+        }
+    }
     render(){
+        
         return (
             <nav>
                 <div className="nav-wrapper black">
@@ -11,7 +27,7 @@ class Header extends Component {
                     </a>
                     <ul className="right">
                         <li>
-                            <a>Login with Google</a>
+                            {this.renderContent()}
                         </li>
                     </ul>
 
@@ -21,4 +37,8 @@ class Header extends Component {
     }
 }
 
-export default Header;
+function mapStateToProps({ auth }){
+    return { auth };
+}
+
+export default connect(mapStateToProps)(Header);
