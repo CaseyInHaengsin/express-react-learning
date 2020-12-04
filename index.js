@@ -1,11 +1,12 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cookieSession = require('cookie-session')
-const keys = require('./configs/keys')
-const passport = require('passport')
-const bodyParser = require('body-parser')
-require('./models/User')
-require('./services/passport')
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const keys = require('./configs/keys');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+require('./models/User');
+require('./models/Survey');
+require('./services/passport');
 
 mongoose.connect(keys.mongoURI).catch(err => {
   console.log(`failed to connect: ${err}`)
@@ -20,11 +21,12 @@ app.use(
   })
 )
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
-require('./routes/authRoutes')(app)
-require('./routes/billingRoutes')(app)
+require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 if (process.env.NODE_ENV === 'production'){
     //Make sure express will serve up prod assets
     app.use(express.static('client/build'));
